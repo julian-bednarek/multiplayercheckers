@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Gradient fill with a diagonal transition -->
+    <gradient
+        android:angle="45"
+        android:startColor="#FF5722"
+        android:centerColor="#FFC107"
+        android:endColor="#4CAF50"
+        android:type="linear" />
+
+    <!-- A blue stroke outlining the shape -->
+    <stroke
+        android:width="4dp"
+        android:color="#3F51B5" />    <!-- Indigo -->
+
+    <!-- Rounded corners with 16dp radius -->
+    <corners
+        android:radius="16dp" />
+
+    <!-- Padding inside the shape -->
+    <padding
+        android:left="12dp"
+        android:top="12dp"
+        android:right="12dp"
+        android:bottom="12dp" />
+
+</shape>

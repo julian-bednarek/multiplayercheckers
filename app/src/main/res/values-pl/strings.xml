@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Warcaby</string>
+    <string name="host_game">Stwórz grę</string>
+    <string name="join_game">Dołącz do gry</string>
+</resources>

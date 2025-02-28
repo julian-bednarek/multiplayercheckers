@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startViewFragment">
+
+    <fragment
+        android:id="@+id/startViewFragment"
+        android:name="com.julian.multiplayercheckers.fragments.StartViewFragment"
+        android:label="StartViewFragment" >
+        <action
+            android:id="@+id/action_startViewFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.julian.multiplayercheckers.fragments.GameFragment"
+        android:label="GameFragment" />
+</navigation>
