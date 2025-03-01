@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import com.julian.multiplayercheckers.R
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.fragment.findNavController
 import com.julian.multiplayercheckers.composables.CheckersCustomButton
@@ -35,7 +37,7 @@ class StartViewFragment : Fragment() {
     }
 
     private fun onJoinGameButtonClicked() {
-
+        findNavController().navigate(R.id.action_startViewFragment_to_gameFragment)
     }
 }
 
@@ -47,6 +49,7 @@ fun StartFragmentView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(colorResource(R.color.background_color))
             .padding(10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
