@@ -52,9 +52,9 @@ fun GameFragmentLayout(viewModel: GameViewModel = hiltViewModel()) {
             modifier = Modifier
                 .offset(y = (-100).dp)
         ) {
-            for (i in 0..<BOARD_SIZE) {
+            for (i in 0 until BOARD_SIZE) {
                 Row {
-                    for (j in 0..<BOARD_SIZE) {
+                    for (j in 0 until BOARD_SIZE) {
                         ProcessBoardField(viewModel.board[i][j])
                     }
                 }

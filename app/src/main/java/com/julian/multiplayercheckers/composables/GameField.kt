@@ -40,7 +40,7 @@ fun GameField(
     ) {
         when(state) {
             FieldStates.NOT_USED -> return
-            FieldStates.EMPTY -> return
+            FieldStates.EMPTY    -> return
             FieldStates.PLAYER_1 -> Pawn(PLAYER_1_COLOR)
             FieldStates.PLAYER_2 -> Pawn(PLAYER_2_COLOR)
             FieldStates.PLAYER_1_QUEEN -> Queen(PLAYER_1_COLOR)
