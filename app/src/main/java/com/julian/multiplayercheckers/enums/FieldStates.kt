@@ -1,6 +1,7 @@
 package com.julian.multiplayercheckers.enums
 
 enum class FieldStates(val value: Int) {
+    NOT_USED(-1),
     EMPTY(0),
     PLAYER_1(1),
     PLAYER_2(2),

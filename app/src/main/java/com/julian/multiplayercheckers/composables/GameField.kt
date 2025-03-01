@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -34,9 +35,11 @@ fun GameField(
         modifier = Modifier
             .height(FIELD_SIZE.dp)
             .width(FIELD_SIZE.dp)
-            .background(color)
+            .background(color),
+        contentAlignment = Alignment.Center
     ) {
         when(state) {
+            FieldStates.NOT_USED -> return
             FieldStates.EMPTY -> return
             FieldStates.PLAYER_1 -> Pawn(PLAYER_1_COLOR)
             FieldStates.PLAYER_2 -> Pawn(PLAYER_2_COLOR)
@@ -85,13 +88,13 @@ private fun buildCrownPath(width: Float, height: Float): Path {
     }
 }
 
-private fun DrawScope.drawCrown() {
+private fun DrawScope.drawCrown(color: Color = Color.Yellow) {
     val w = size.width
     val h = size.height
     val crownPath = buildCrownPath(w, h)
     drawPath(
         path = crownPath,
-        color = Color.Yellow,
+        color = color,
         style = Fill
     )
 }
@@ -103,12 +106,11 @@ fun Queen(
 ) {
     Box(
         modifier = Modifier
-            .size(FIELD_SIZE.dp)
-            .clip(CircleShape)
-            .background(color)
+            .size(FIELD_CONTENT_SIZE.dp)
+            .background(Color.Transparent)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawCrown()
+            drawCrown(color)
         }
     }
 }

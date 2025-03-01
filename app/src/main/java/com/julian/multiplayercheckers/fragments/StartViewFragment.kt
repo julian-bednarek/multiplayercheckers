@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.fragment.findNavController
 import com.julian.multiplayercheckers.composables.CheckersCustomButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StartViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
