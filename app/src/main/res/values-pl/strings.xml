@@ -3,4 +3,9 @@
     <string name="app_name">Warcaby</string>
     <string name="host_game">Stwórz grę</string>
     <string name="join_game">Dołącz do gry</string>
+    <string name="email_placeholder">Wprowadź email…</string>
+    <string name="password_placeholder">Wprowadź hasło…</string>
+    <string name="password_label">Hasło</string>
+    <string name="login_action">Zaloguj się</string>
+    <string name="sing_up_prompt">Nie masz konta? Zarejestruj się!</string>
 </resources>

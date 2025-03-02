@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background_color">#FF57210D</color>
+    <color name="forms_color">#FFFFA07A</color>
+    <color name="forms_util_color">#FFF0F8FF</color>
 </resources>

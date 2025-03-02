@@ -3,4 +3,10 @@
     <string name="host_game">Host game</string>
     <string name="join_game">Join Game</string>
     <string name="error" translatable="false">Error</string>
+    <string name="email_placeholder">Enter email…</string>
+    <string name="email_label" translatable="false">Email</string>
+    <string name="password_placeholder">Enter password…</string>
+    <string name="password_label">Password</string>
+    <string name="login_action">Log in</string>
+    <string name="sing_up_prompt">Not registered? Sign up!</string>
 </resources>

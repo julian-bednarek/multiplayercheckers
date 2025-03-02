@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/startViewFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/startViewFragment"
@@ -16,4 +16,23 @@
         android:id="@+id/gameFragment"
         android:name="com.julian.multiplayercheckers.fragments.GameFragment"
         android:label="GameFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.julian.multiplayercheckers.fragments.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_singUpFragment"
+            app:destination="@id/singUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_startViewFragment"
+            app:destination="@id/startViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singUpFragment"
+        android:name="com.julian.multiplayercheckers.fragments.SingUpFragment"
+        android:label="SingUpFragment" >
+        <action
+            android:id="@+id/action_singUpFragment_to_startViewFragment"
+            app:destination="@id/startViewFragment" />
+    </fragment>
 </navigation>
