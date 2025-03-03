@@ -95,7 +95,7 @@ fun LoginFragmentView(
                     AuthorizationInputField(
                         onValueChange = { email = it },
                         labelResID = R.string.email_label,
-                        placeholderResID = R.string.password_placeholder
+                        placeholderResID = R.string.email_placeholder
                     )
 
                     AuthorizationInputField(

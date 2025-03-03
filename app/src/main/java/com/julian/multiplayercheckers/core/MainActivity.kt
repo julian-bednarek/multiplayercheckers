@@ -2,6 +2,8 @@ package com.julian.multiplayercheckers.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.julian.multiplayercheckers.R
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,8 +24,13 @@ class MainActivity : AppCompatActivity() {
     private fun checkLoggedIn() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-        } else {
+            val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment_activity_main) as? NavHostFragment
+            navHostFragment?.navController?.navigate(
+                R.id.startViewFragment,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+            )
         }
     }
-
 }

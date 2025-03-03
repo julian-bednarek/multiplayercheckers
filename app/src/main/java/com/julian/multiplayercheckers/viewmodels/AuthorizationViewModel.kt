@@ -3,6 +3,7 @@ package com.julian.multiplayercheckers.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +30,18 @@ class AuthorizationViewModel @Inject constructor(
         }
     }
 
-    fun trySignUp(email: String, password: String, onResult: (Result<Boolean>) -> Unit) {
+    fun trySignUp(email: String, password: String, username: String, onResult: (Result<Boolean>) -> Unit) {
         coroutineScope.launch {
             try {
-                auth.createUserWithEmailAndPassword(email, password).await()
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    if(task.isSuccessful) {
+                        val user = auth.currentUser
+                        val profileUpdates = UserProfileChangeRequest.Builder()
+                            .setDisplayName(username)
+                            .build()
+                        user?.updateProfile(profileUpdates)
+                    }
+                }
                 onResult(Result.success(true))
             } catch (e: Exception) {
                 onResult(Result.failure(e))

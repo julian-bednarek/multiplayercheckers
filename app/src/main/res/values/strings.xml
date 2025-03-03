@@ -9,4 +9,9 @@
     <string name="password_label">Password</string>
     <string name="login_action">Log in</string>
     <string name="sing_up_prompt">Not registered? Sign up!</string>
+    <string name="retype_password_label">Retype password</string>
+    <string name="retype_password_placeholder">Retype password…</string>
+    <string name="username_label">Username</string>
+    <string name="username_placeholder">Enter username…</string>
+    <string name="sign_out">Sing out</string>
 </resources>

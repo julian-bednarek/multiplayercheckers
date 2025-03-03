@@ -8,4 +8,9 @@
     <string name="password_label">Hasło</string>
     <string name="login_action">Zaloguj się</string>
     <string name="sing_up_prompt">Nie masz konta? Zarejestruj się!</string>
+    <string name="retype_password_label">Wprowadz hasło ponownie</string>
+    <string name="retype_password_placeholder">Wprowadź hasło ponowanie…</string>
+    <string name="username_label">Nazwa użytkownika</string>
+    <string name="username_placeholder">Wprowadź nazwę użytknownika…</string>
+    <string name="sign_out">Wyloguj się</string>
 </resources>
