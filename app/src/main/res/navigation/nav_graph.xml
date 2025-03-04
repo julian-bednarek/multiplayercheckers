@@ -9,16 +9,23 @@
         android:name="com.julian.multiplayercheckers.fragments.StartViewFragment"
         android:label="StartViewFragment" >
         <action
-            android:id="@+id/action_startViewFragment_to_gameFragment"
-            app:destination="@id/gameFragment" />
-        <action
             android:id="@+id/action_startViewFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_startViewFragment_to_joinGameFragment"
+            app:destination="@id/joinGameFragment" />
+        <action
+            android:id="@+id/action_startViewFragment_to_hostGameFragment"
+            app:destination="@id/hostGameFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
         android:name="com.julian.multiplayercheckers.fragments.GameFragment"
-        android:label="GameFragment" />
+        android:label="GameFragment" >
+        <action
+            android:id="@+id/action_gameFragment_to_startViewFragment"
+            app:destination="@id/startViewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.julian.multiplayercheckers.fragments.LoginFragment"
@@ -36,6 +43,28 @@
         android:label="SingUpFragment" >
         <action
             android:id="@+id/action_singUpFragment_to_startViewFragment"
+            app:destination="@id/startViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hostGameFragment"
+        android:name="com.julian.multiplayercheckers.fragments.HostGameFragment"
+        android:label="HostGameFragment" >
+        <action
+            android:id="@+id/action_hostGameFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_hostGameFragment_to_startViewFragment"
+            app:destination="@id/startViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinGameFragment"
+        android:name="com.julian.multiplayercheckers.fragments.JoinGameFragment"
+        android:label="JoinGameFragment" >
+        <action
+            android:id="@+id/action_joinGameFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_joinGameFragment_to_startViewFragment"
             app:destination="@id/startViewFragment" />
     </fragment>
 </navigation>

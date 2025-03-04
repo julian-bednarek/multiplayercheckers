@@ -14,4 +14,11 @@
     <string name="username_label">Username</string>
     <string name="username_placeholder">Enter username…</string>
     <string name="sign_out">Sing out</string>
+    <string name="exception_login_failed">Login failed</string>
+    <string name="exception_password_dont_match">Passwords typed does not match</string>
+    <string name="exception_too_weak_password">Your password is too weak</string>
+    <string name="exception_invalid_email">Your email is invalid</string>
+    <string name="exception_empty_username">Your username can\'t be empty</string>
+    <string name="exception_email_already_used">This email is already used</string>
+    <string name="hello_msg">Hello,</string>
 </resources>

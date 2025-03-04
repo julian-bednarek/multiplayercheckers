@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +27,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -41,6 +44,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private val authViewModel: AuthorizationViewModel by viewModels()
+    private val errorMessage: MutableState<String> = mutableStateOf("")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +55,9 @@ class LoginFragment : Fragment() {
             setContent {
                 LoginFragmentView(
                     onLoginClick = {email, password ->  onLogInClicked(email, password)},
-                    onSignUpClick = {onSingUpClicked()}
+                    onSignUpClick = {onSingUpClicked()},
+                    errorMessage = errorMessage.value,
+                    onClearError = { errorMessage.value = "" }
                 )
             }
         }
@@ -59,10 +65,12 @@ class LoginFragment : Fragment() {
 
     private fun onLogInClicked(email: String, password: String) {
         authViewModel.trySignIn(email, password) { result ->
-            if(result.isSuccess) {
-                findNavController().navigate(R.id.action_loginFragment_to_startViewFragment)
-            } else {
-                Log.d("Dupa", "chuj")
+            activity?.runOnUiThread {
+                if (result.isSuccess) {
+                    findNavController().navigate(R.id.action_loginFragment_to_startViewFragment)
+                } else {
+                    errorMessage.value = getString(R.string.exception_login_failed)
+                }
             }
         }
     }
@@ -77,9 +85,11 @@ class LoginFragment : Fragment() {
 @Composable
 fun LoginFragmentView(
     onLoginClick: (email: String, password: String) -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    errorMessage: String = "",
+    onClearError: () -> Unit
 ) {
-    var email: String  by remember { mutableStateOf("") }
+    var email: String by remember { mutableStateOf("") }
     var password: String by remember { mutableStateOf("") }
 
     Box(
@@ -92,14 +102,29 @@ fun LoginFragmentView(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FormCard {
+                    if (errorMessage.isNotEmpty()) {
+                        Text(
+                            text = errorMessage,
+                            color = Color.Red,
+                            fontSize = 18.sp,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
                     AuthorizationInputField(
-                        onValueChange = { email = it },
+                        onValueChange = {
+                            email = it
+                            onClearError()
+                        },
                         labelResID = R.string.email_label,
                         placeholderResID = R.string.email_placeholder
                     )
 
                     AuthorizationInputField(
-                        onValueChange = { password = it },
+                        onValueChange = {
+                            password = it
+                            onClearError()
+                        },
                         labelResID = R.string.password_label,
                         placeholderResID = R.string.password_placeholder,
                         visualTransformation = PasswordVisualTransformation()

@@ -22,8 +22,11 @@ class AuthorizationViewModel @Inject constructor(
     fun trySignIn(email: String, password: String, onResult: (Result<Boolean>) -> Unit) {
         coroutineScope.launch {
             try {
-                auth.signInWithEmailAndPassword(email, password).await()
-                onResult(Result.success(true))
+                val authResult = auth.signInWithEmailAndPassword(email, password).await()
+                val result = authResult.user?.let {
+                    Result.success(true)
+                } ?: Result.failure(Exception("Invalid credentials"))
+                onResult(result)
             } catch (e: Exception) {
                 onResult(Result.failure(e))
             }

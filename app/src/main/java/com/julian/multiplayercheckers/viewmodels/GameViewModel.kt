@@ -2,6 +2,7 @@ package com.julian.multiplayercheckers.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.google.firebase.database.DatabaseReference
 import com.julian.multiplayercheckers.enums.FieldStates
 import com.julian.multiplayercheckers.fragments.BOARD_SIZE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    application: Application
+    application: Application,
+    database: DatabaseReference
 ) : AndroidViewModel(application) {
     val board: Array<IntArray> = Array(BOARD_SIZE) { IntArray(BOARD_SIZE) }
 

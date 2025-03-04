@@ -26,7 +26,7 @@ fun AuthorizationInputField(
    placeholderResID: Int,
    onValueChange: (str: String) -> Unit = {}
 ) {
-    var str: String  by remember{mutableStateOf("")}
+    var str: String by remember{mutableStateOf("")}
     val textFieldColorDefaults = TextFieldDefaults.colors(
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,

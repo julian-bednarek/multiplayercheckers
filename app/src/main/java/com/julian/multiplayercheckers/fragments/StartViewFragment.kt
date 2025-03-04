@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.julian.multiplayercheckers.composables.CheckersCustomButton
@@ -32,6 +34,13 @@ class StartViewFragment : Fragment() {
     @Inject
     lateinit var auth: FirebaseAuth
 
+    private var username: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        username = auth.currentUser?.displayName!!
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +48,12 @@ class StartViewFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                StartFragmentView({onHostGameButtonCLicked() }, {onJoinGameButtonClicked()}, {onSignOutButtonClicked()})
+                StartFragmentView(
+                    {onHostGameButtonCLicked()},
+                    {onJoinGameButtonClicked()},
+                    {onSignOutButtonClicked()},
+                    username
+                )
             }
         }
     }
@@ -62,7 +76,8 @@ class StartViewFragment : Fragment() {
 fun StartFragmentView(
     hostGameOnClick: () -> Unit = {},
     joinGameOnClick: () -> Unit = {},
-    signOutOnClick:  () -> Unit = {}
+    signOutOnClick:  () -> Unit = {},
+    username: String = ""
 ) {
     Box(
         modifier = Modifier
@@ -88,6 +103,12 @@ fun StartFragmentView(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = "${stringResource(id = R.string.hello_msg)} $username",
+                color = Color.White,
+                fontSize = 30.sp
+            )
+            Spacer(modifier = Modifier.height(100.dp))
             CheckersCustomButton(
                 onClickFun = hostGameOnClick,
                 stringID = R.string.join_game

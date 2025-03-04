@@ -13,4 +13,11 @@
     <string name="username_label">Nazwa użytkownika</string>
     <string name="username_placeholder">Wprowadź nazwę użytknownika…</string>
     <string name="sign_out">Wyloguj się</string>
+    <string name="exception_login_failed">Logowanie nieudane</string>
+    <string name="exception_password_dont_match">Wprowadzaone hasła są różne</string>
+    <string name="exception_too_weak_password">Twoje hasło jest za słabe</string>
+    <string name="exception_invalid_email">Twój email jest nieprawidłowy</string>
+    <string name="exception_empty_username">Nazwa użytkownika nie może być pusta</string>
+    <string name="exception_email_already_used">Ten email jest już zarejestrowany</string>
+    <string name="hello_msg">Witaj,</string>
 </resources>

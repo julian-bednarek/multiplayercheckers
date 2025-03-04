@@ -1,4 +1,4 @@
-package com.julian.multiplayercheckers.authorization
+package com.julian.multiplayercheckers.firebasemodules
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
