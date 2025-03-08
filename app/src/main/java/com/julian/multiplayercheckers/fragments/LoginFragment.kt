@@ -1,7 +1,6 @@
 package com.julian.multiplayercheckers.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,14 +26,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.julian.multiplayercheckers.R
-import com.julian.multiplayercheckers.composables.AuthorizationInputField
+import com.julian.multiplayercheckers.composables.CheckersInputField
 import com.julian.multiplayercheckers.composables.FormCard
 import com.julian.multiplayercheckers.composables.TransparentSignUpButton
 import com.julian.multiplayercheckers.viewmodels.AuthorizationViewModel
@@ -111,7 +109,7 @@ fun LoginFragmentView(
                         )
                     }
 
-                    AuthorizationInputField(
+                    CheckersInputField(
                         onValueChange = {
                             email = it
                             onClearError()
@@ -120,7 +118,7 @@ fun LoginFragmentView(
                         placeholderResID = R.string.email_placeholder
                     )
 
-                    AuthorizationInputField(
+                    CheckersInputField(
                         onValueChange = {
                             password = it
                             onClearError()

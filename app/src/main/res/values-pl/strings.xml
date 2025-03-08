@@ -20,4 +20,7 @@
     <string name="exception_empty_username">Nazwa użytkownika nie może być pusta</string>
     <string name="exception_email_already_used">Ten email jest już zarejestrowany</string>
     <string name="hello_msg">Witaj,</string>
+    <string name="host_token_msg">To jest token, dzięki któremu twój znajomy dołączy do gry</string>
+    <string name="cancel_hosting">Anuluj</string>
+    <string name="enter_token_label">Wprowadź token</string>
 </resources>

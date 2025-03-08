@@ -21,4 +21,8 @@
     <string name="exception_empty_username">Your username can\'t be empty</string>
     <string name="exception_email_already_used">This email is already used</string>
     <string name="hello_msg">Hello,</string>
+    <string name="host_token_msg">This your game token that your friend can use to join the game</string>
+    <string name="cancel_hosting">Cancel</string>
+    <string name="enter_token_label">Enter token</string>
+    <string name="enter_token_placeholder" translatable="false">token…</string>
 </resources>

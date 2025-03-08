@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AuthorizationInputField(
+fun CheckersInputField(
    visualTransformation: VisualTransformation = VisualTransformation.None,
    labelResID: Int,
    placeholderResID: Int,
@@ -48,7 +48,7 @@ fun AuthorizationInputField(
         },
         label = { Text(stringResource(id = labelResID)) },
         placeholder = { Text(stringResource(id = placeholderResID)) },
-        textStyle = TextStyle(fontSize = 16.sp),
+        textStyle = TextStyle(fontSize = 15.sp),
         visualTransformation = visualTransformation,
         colors = textFieldColorDefaults,
         modifier = Modifier

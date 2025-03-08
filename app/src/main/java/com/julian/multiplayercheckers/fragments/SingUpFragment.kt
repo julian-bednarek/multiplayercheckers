@@ -1,7 +1,6 @@
 package com.julian.multiplayercheckers.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +32,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.julian.multiplayercheckers.R
-import com.julian.multiplayercheckers.composables.AuthorizationInputField
+import com.julian.multiplayercheckers.composables.CheckersInputField
 import com.julian.multiplayercheckers.composables.FormCard
 import com.julian.multiplayercheckers.viewmodels.AuthorizationViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,7 +106,7 @@ fun SingUpFragmentView(onSignUpClick: (email: String, password: String,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                AuthorizationInputField(
+                CheckersInputField(
                     onValueChange = {
                         username = it
                         onClearError()
@@ -115,7 +114,7 @@ fun SingUpFragmentView(onSignUpClick: (email: String, password: String,
                     labelResID = R.string.username_label,
                     placeholderResID = R.string.username_placeholder
                 )
-                AuthorizationInputField(
+                CheckersInputField(
                     onValueChange = {
                         singUpEmail = it
                         onClearError()
@@ -123,7 +122,7 @@ fun SingUpFragmentView(onSignUpClick: (email: String, password: String,
                     labelResID = R.string.email_label,
                     placeholderResID = R.string.email_placeholder
                 )
-                AuthorizationInputField(
+                CheckersInputField(
                     onValueChange = {
                         password = it
                         onClearError()
@@ -132,7 +131,7 @@ fun SingUpFragmentView(onSignUpClick: (email: String, password: String,
                     placeholderResID = R.string.password_placeholder,
                     visualTransformation = PasswordVisualTransformation()
                 )
-                AuthorizationInputField(
+                CheckersInputField(
                     onValueChange = {
                         repeatedPassword = it
                         onClearError()

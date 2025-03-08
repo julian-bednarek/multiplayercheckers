@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.julian.multiplayercheckers.composables.CheckersCustomButton
+import com.julian.multiplayercheckers.composables.StartViewCustomButton
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -59,11 +59,11 @@ class StartViewFragment : Fragment() {
     }
 
     private fun onHostGameButtonCLicked() {
-        findNavController().navigate(R.id.action_startViewFragment_to_gameFragment)
+        findNavController().navigate(R.id.action_startViewFragment_to_hostGameFragment)
     }
 
     private fun onJoinGameButtonClicked() {
-        findNavController().navigate(R.id.action_startViewFragment_to_gameFragment)
+        findNavController().navigate(R.id.action_startViewFragment_to_joinGameFragment)
     }
 
     private fun onSignOutButtonClicked() {
@@ -109,13 +109,13 @@ fun StartFragmentView(
                 fontSize = 30.sp
             )
             Spacer(modifier = Modifier.height(100.dp))
-            CheckersCustomButton(
-                onClickFun = hostGameOnClick,
+            StartViewCustomButton(
+                onClickFun = joinGameOnClick,
                 stringID = R.string.join_game
             )
             Spacer(modifier = Modifier.height(10.dp))
-            CheckersCustomButton(
-                onClickFun = joinGameOnClick,
+            StartViewCustomButton(
+                onClickFun = hostGameOnClick,
                 stringID = R.string.host_game
             )
         }
