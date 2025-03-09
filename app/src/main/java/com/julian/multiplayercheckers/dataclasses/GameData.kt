@@ -1,6 +1,6 @@
 package com.julian.multiplayercheckers.dataclasses
 
-import com.julian.multiplayercheckers.viewmodels.GameLobbyViewModel.Companion.INITIAL_GAME_STATE
+import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.INITIAL_GAME_STATE
 
 
 data class GameData(

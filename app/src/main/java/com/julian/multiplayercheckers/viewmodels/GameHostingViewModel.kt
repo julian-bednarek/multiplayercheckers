@@ -10,12 +10,12 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class GameLobbyViewModel @Inject constructor(
+class GameHostingViewModel @Inject constructor(
     application: Application,
     private val database: FirebaseDatabase
 ) : AndroidViewModel(application) {
 
-    var gameToken: String = ""
+    val gameToken: String = generateToken()
 
     companion object {
         const val TOKENS = "tokens"
@@ -26,7 +26,6 @@ class GameLobbyViewModel @Inject constructor(
     }
 
     fun hostGame() {
-        gameToken = generateToken()
         val tokensReference = database.getReference(TOKENS)
         tokensReference.child(gameToken).setValue(GameData()).addOnFailureListener {
             Log.e("WTF", "ALE COS SIE ZJEBALO")

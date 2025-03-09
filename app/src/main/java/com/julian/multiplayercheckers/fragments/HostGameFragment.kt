@@ -16,7 +16,7 @@ import com.julian.multiplayercheckers.composables.CopyTokenButton
 import com.julian.multiplayercheckers.composables.FormCard
 import com.julian.multiplayercheckers.composables.GeneralCustomButton
 import com.julian.multiplayercheckers.composables.GeneralLayout
-import com.julian.multiplayercheckers.viewmodels.GameLobbyViewModel
+import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +25,7 @@ class HostGameFragment : Fragment() {
     companion object {
         private var _isHosting = false
     }
-    private val viewModel: GameLobbyViewModel by viewModels()
+    private val viewModel: GameHostingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: android.view.LayoutInflater,
