@@ -19,6 +19,7 @@ import com.julian.multiplayercheckers.composables.CopyTokenButton
 import com.julian.multiplayercheckers.composables.FormCard
 import com.julian.multiplayercheckers.composables.GeneralCustomButton
 import com.julian.multiplayercheckers.composables.GeneralLayout
+import com.julian.multiplayercheckers.dataclasses.GameData
 import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel
 import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.WAITING_END
 import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.WAITING_ERROR
@@ -48,7 +49,7 @@ class HostGameFragment : Fragment() {
                 LaunchedEffect(waitingStatus.value) {
                     when (waitingStatus.value) {
                         WAITING_END -> {
-                            val action = HostGameFragmentDirections.actionHostGameFragmentToGameFragment(viewModel.gameToken)
+                            val action = HostGameFragmentDirections.actionHostGameFragmentToGameFragment(viewModel.gameToken, GameData.HOST_TURN)
                             findNavController().navigate(action)
                         }
                         WAITING_ERROR -> {

@@ -28,6 +28,9 @@
         <argument
             android:name="GAME_TOKEN"
             app:argType="string" />
+        <argument
+            android:name="USER_TURN"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

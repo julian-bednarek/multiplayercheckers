@@ -24,11 +24,16 @@ import com.julian.multiplayercheckers.composables.GameField
 import com.julian.multiplayercheckers.enums.FieldStates
 import com.julian.multiplayercheckers.viewmodels.GameViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 const val BOARD_SIZE: Int = 8
+val NOT_USED_COLOR: Color = Color.White
+val USED_COLOR: Color = Color.Black
 
 @AndroidEntryPoint
-class GameFragment : Fragment() {
+class GameFragment @Inject constructor(
+    private val viewModel: GameViewModel
+) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +41,7 @@ class GameFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                requireArguments().getInt("USER_TURN").let { viewModel.userTurn = it }
                 requireArguments().getString("GAME_TOKEN")?.let { GameFragmentLayout(it) }
             }
         }
@@ -68,8 +74,6 @@ fun GameFragmentLayout(gameToken: String, viewModel: GameViewModel = hiltViewMod
 
 @Composable
 fun ProcessBoardField(field: Int) {
-    val NOT_USED_COLOR: Color = Color.White
-    val USED_COLOR: Color = Color.Black
     when(field) {
         FieldStates.NOT_USED.value  -> GameField(NOT_USED_COLOR, FieldStates.NOT_USED)
         FieldStates.EMPTY.value     -> GameField(USED_COLOR, FieldStates.EMPTY)
