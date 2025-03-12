@@ -1,8 +1,11 @@
 package com.julian.multiplayercheckers.fragments
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
@@ -17,7 +20,10 @@ import com.julian.multiplayercheckers.composables.FormCard
 import com.julian.multiplayercheckers.composables.GeneralCustomButton
 import com.julian.multiplayercheckers.composables.GeneralLayout
 import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel
+import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.WAITING_END
+import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.WAITING_ERROR
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.time.Duration
 
 @AndroidEntryPoint
 class HostGameFragment : Fragment() {
@@ -34,10 +40,23 @@ class HostGameFragment : Fragment() {
     ): android.view.View {
         return ComposeView(requireContext()).apply {
             setContent {
+                val waitingStatus = viewModel.waitingStatus.collectAsState()
                 HostGameView(
                     token = viewModel.gameToken,
                     onCancel = { cancelHosting() }
                 )
+                LaunchedEffect(waitingStatus.value) {
+                    when (waitingStatus.value) {
+                        WAITING_END -> {
+                            val action = HostGameFragmentDirections.actionHostGameFragmentToGameFragment(viewModel.gameToken)
+                            findNavController().navigate(action)
+                        }
+                        WAITING_ERROR -> {
+                            Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_LONG).show()
+                            findNavController().navigate(R.id.action_hostGameFragment_to_startViewFragment)
+                        }
+                    }
+                }
             }
         }
     }

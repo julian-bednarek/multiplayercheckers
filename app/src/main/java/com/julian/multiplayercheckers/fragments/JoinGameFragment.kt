@@ -30,6 +30,7 @@ import androidx.navigation.fragment.findNavController
 import com.julian.multiplayercheckers.R
 import com.julian.multiplayercheckers.composables.CheckersInputField
 import com.julian.multiplayercheckers.composables.FormCard
+import com.julian.multiplayercheckers.composables.GeneralLayout
 import com.julian.multiplayercheckers.composables.LobbyCustomButton
 import com.julian.multiplayercheckers.viewmodels.GameJoiningViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +55,8 @@ class JoinGameFragment : Fragment() {
                 LaunchedEffect(tokenValid) {
                     tokenValid?.let { valid ->
                         if(valid) {
-                            findNavController().navigate(R.id.action_joinGameFragment_to_gameFragment)
+                            val action = JoinGameFragmentDirections.actionJoinGameFragmentToGameFragment(viewModel.tokenInput.value)
+                            findNavController().navigate(action)
                         } else {
                             Toast.makeText(requireContext(), "Invalid token", Toast.LENGTH_SHORT).show()
                         }
@@ -79,19 +81,7 @@ fun JoinGameView(
     onCancelClickFun: () -> Unit = {},
     onVerifyTokenClickFun: () -> Unit = {}
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.background_color))
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            FormCard {
+    GeneralLayout {
                 CheckersInputField(
                     onValueChange = {viewModel.setToken(it)},
                     labelResID = R.string.enter_token_label,

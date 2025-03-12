@@ -36,20 +36,21 @@ class GameFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                GameFragmentLayout()
+                requireArguments().getString("GAME_TOKEN")?.let { GameFragmentLayout(it) }
             }
         }
     }
 }
 
 @Composable
-fun GameFragmentLayout(viewModel: GameViewModel = hiltViewModel()) {
+fun GameFragmentLayout(gameToken: String, viewModel: GameViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(R.color.background_color)),
         contentAlignment = Alignment.Center
     ) {
+        viewModel.observeBoard(gameToken)
         Column(
             modifier = Modifier
                 .offset(y = (-100).dp)

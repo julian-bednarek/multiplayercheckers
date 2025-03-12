@@ -2,29 +2,41 @@ package com.julian.multiplayercheckers.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.julian.multiplayercheckers.dataclasses.GameData
 import com.julian.multiplayercheckers.enums.FieldStates
 import com.julian.multiplayercheckers.fragments.BOARD_SIZE
+import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.TOKENS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
     application: Application,
-    database: DatabaseReference
+    private val database: DatabaseReference
 ) : AndroidViewModel(application) {
+    private val _canMove: MutableLiveData<Boolean> = MutableLiveData(false)
+    val canMove: LiveData<Boolean> get() = _canMove
     val board: Array<IntArray> = Array(BOARD_SIZE) { IntArray(BOARD_SIZE) }
 
-    init {
-        for (i in 0 until BOARD_SIZE) {
-            for (j in 0 until BOARD_SIZE) {
-                board[i][j] = when {
-                    i in 0..2 && (i + j) % 2 == 1 -> FieldStates.PLAYER_1.value
-                    i in 5..7 && (i + j) % 2 == 1 -> FieldStates.PLAYER_2.value
-                    (i + j) % 2 == 1 -> FieldStates.EMPTY.value
-                    else -> FieldStates.NOT_USED.value
+    fun observeBoard(gameToken: String) {
+        val gameStateReference = database.child(TOKENS).child(gameToken)
+        val gameStateListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val gameData: GameData = snapshot.getValue(GameData::class.java)!!
                 }
             }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
         }
+        gameStateReference.addValueEventListener(gameStateListener)
     }
 }

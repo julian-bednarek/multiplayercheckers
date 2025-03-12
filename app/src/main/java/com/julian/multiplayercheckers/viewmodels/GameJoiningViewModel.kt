@@ -6,6 +6,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.julian.multiplayercheckers.dataclasses.GameData
+import com.julian.multiplayercheckers.dataclasses.GameData.Companion.GAME_STARTED
 import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.TOKENS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +22,7 @@ class GameJoiningViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     private val _tokenInput = MutableStateFlow("")
-    private val tokenInput: StateFlow<String> = _tokenInput.asStateFlow()
+    val tokenInput: StateFlow<String> get() = _tokenInput
 
     fun setToken(value: String) {
         _tokenInput.value = value
@@ -31,14 +33,19 @@ class GameJoiningViewModel @Inject constructor(
 
     fun validateToken() {
         val tokensReference = database.getReference(TOKENS)
-        tokensReference.child(tokenInput.value).addValueEventListener(object : ValueEventListener {
+        val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 _tokenValid.value = snapshot.exists()
+                if (_tokenValid.value!!) {
+                    tokensReference.child(_tokenInput.value).child("gameStatus").setValue(GAME_STARTED)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 _tokenValid.value = false
             }
-        })
+        }
+        tokensReference.addValueEventListener(listener)
+
     }
 }

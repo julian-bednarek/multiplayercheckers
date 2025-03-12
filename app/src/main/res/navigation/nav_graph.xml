@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_gameFragment_to_startViewFragment"
             app:destination="@id/startViewFragment" />
+        <argument
+            android:name="GAME_TOKEN"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
