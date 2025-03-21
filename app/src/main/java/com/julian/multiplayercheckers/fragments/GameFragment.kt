@@ -27,11 +27,11 @@ import com.julian.multiplayercheckers.composables.GameField
 import com.julian.multiplayercheckers.enums.FieldStates
 import com.julian.multiplayercheckers.viewmodels.GameViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
 
 const val BOARD_SIZE: Int = 8
 val NOT_USED_COLOR: Color = Color.White
 val USED_COLOR: Color = Color.Black
+val HINT_COLOR: Color = Color.LightGray
 
 @AndroidEntryPoint
 class GameFragment : Fragment() {
@@ -68,7 +68,7 @@ fun GameFragmentLayout(gameToken: String, viewModel: GameViewModel = hiltViewMod
             for (i in 0 until BOARD_SIZE) {
                 Row {
                     for (j in 0 until BOARD_SIZE) {
-                        ProcessBoardField(viewModel.board, i, j)
+                        ProcessBoardField(viewModel, i, j)
                     }
                 }
             }
@@ -77,16 +77,24 @@ fun GameFragmentLayout(gameToken: String, viewModel: GameViewModel = hiltViewMod
 }
 
 @Composable
-fun ProcessBoardField(board: StateFlow<Array<Array<FieldStates>>>, row: Int, col: Int) {
-    val boardState by board.collectAsState()
+fun ProcessBoardField(
+    viewModel: GameViewModel, row: Int, col: Int,
+) {
+    val boardState by viewModel.board.collectAsState()
     when(boardState[row][col]) {
-        FieldStates.NOT_USED  -> GameField(NOT_USED_COLOR, FieldStates.NOT_USED)
-        FieldStates.EMPTY     -> GameField(USED_COLOR, FieldStates.EMPTY)
-        FieldStates.PLAYER_1  -> GameField(USED_COLOR, FieldStates.PLAYER_1)
-        FieldStates.PLAYER_2  -> GameField(USED_COLOR, FieldStates.PLAYER_2)
-        FieldStates.PLAYER_1_QUEEN -> GameField(USED_COLOR, FieldStates.PLAYER_1_QUEEN)
-        FieldStates.PLAYER_2_QUEEN -> GameField(USED_COLOR, FieldStates.PLAYER_2_QUEEN)
-        // TODO CHANGE IT TO PROPER HINT
-        FieldStates.HINT -> GameField(NOT_USED_COLOR, FieldStates.NOT_USED)
+        FieldStates.NOT_USED  -> GameField(NOT_USED_COLOR, FieldStates.NOT_USED
+        ) { viewModel.onPieceSelected(row, col) }
+        FieldStates.EMPTY     -> GameField(USED_COLOR, FieldStates.EMPTY
+        ) { viewModel.onPieceSelected(row, col) }
+        FieldStates.PLAYER_1  -> GameField(USED_COLOR, FieldStates.PLAYER_1
+        ) { viewModel.onPieceSelected(row, col) }
+        FieldStates.PLAYER_2  -> GameField(USED_COLOR, FieldStates.PLAYER_2
+        ) { viewModel.onPieceSelected(row, col) }
+        FieldStates.PLAYER_1_QUEEN -> GameField(USED_COLOR, FieldStates.PLAYER_1_QUEEN
+        ) { viewModel.onPieceSelected(row, col) }
+        FieldStates.PLAYER_2_QUEEN -> GameField(USED_COLOR, FieldStates.PLAYER_2_QUEEN
+        ) { viewModel.onPieceSelected(row, col) }
+        FieldStates.HINT -> GameField(HINT_COLOR, FieldStates.HINT
+        ) { viewModel.onPieceSelected(row, col) }
     }
 }

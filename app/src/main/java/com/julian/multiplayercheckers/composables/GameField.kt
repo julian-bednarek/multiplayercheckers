@@ -2,6 +2,7 @@ package com.julian.multiplayercheckers.composables
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -29,14 +30,16 @@ val PLAYER_2_COLOR: Color = Color.Blue
 @Composable
 fun GameField(
     color: Color = Color.Transparent,
-    state: FieldStates = FieldStates.EMPTY
+    state: FieldStates = FieldStates.EMPTY,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .height(FIELD_SIZE.dp)
             .width(FIELD_SIZE.dp)
-            .background(color),
-        contentAlignment = Alignment.Center
+            .background(color)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
         when(state) {
             FieldStates.NOT_USED -> return
