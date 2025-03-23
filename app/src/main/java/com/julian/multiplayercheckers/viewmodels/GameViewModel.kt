@@ -18,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,12 +31,12 @@ class GameViewModel @Inject constructor(
     private val _canMove: MutableLiveData<Boolean> = MutableLiveData(false)
     val canMove: LiveData<Boolean> get() = _canMove
 
-    private val _board = MutableStateFlow(Array(BOARD_SIZE) { row ->
+    private val _board = MutableLiveData(Array(BOARD_SIZE) { row ->
         Array(BOARD_SIZE) { col ->
             if ((row + col) % 2 == 1) FieldStates.EMPTY else FieldStates.NOT_USED
         }
     })
-    val board: StateFlow<Array<Array<FieldStates>>> = _board.asStateFlow()
+    val board: LiveData<Array<Array<FieldStates>>> = _board
 
     var userTurn: Int = HOST_TURN
 
@@ -62,7 +61,7 @@ class GameViewModel @Inject constructor(
 
     private fun updateBoard(gameState: String) {
         val newBoard = Array(BOARD_SIZE) { row ->
-            Array(BOARD_SIZE) { col -> board.value[row][col] }
+            Array(BOARD_SIZE) { col -> board.value!![row][col] }
         }
         var index = 0
         val rowRange = if (userTurn == GUEST_TURN) 0 until BOARD_SIZE else BOARD_SIZE - 1 downTo 0
@@ -89,73 +88,6 @@ class GameViewModel @Inject constructor(
         _board.value = newBoard
     }
 
-    private fun getValidMoves(row: Int, col: Int): List<Pair<Int, Int>> {
-        val piece = _board.value[row][col]
-        if (!isCurrentPlayerPiece(piece)) return emptyList()
-
-        val directions = getPieceDirections(piece)
-        return directions.flatMap { (deltaRow, deltaCol) ->
-            getMovesInDirection(row, col, deltaRow, deltaCol)
-        }
-    }
-
-    private fun isCurrentPlayerPiece(piece: FieldStates): Boolean {
-        return when {
-            userTurn == GameData.HOST_TURN && (piece == FieldStates.PLAYER_1 || piece == FieldStates.PLAYER_1_QUEEN) -> true
-            userTurn == GameData.GUEST_TURN && (piece == FieldStates.PLAYER_2 || piece == FieldStates.PLAYER_2_QUEEN) -> true
-            else -> false
-        }
-    }
-
-    private fun getPieceDirections(piece: FieldStates): List<Pair<Int, Int>> {
-        return when (piece) {
-            FieldStates.PLAYER_1 -> listOf(Pair(1, -1), Pair(1, 1))
-            FieldStates.PLAYER_2 -> listOf(Pair(-1, -1), Pair(-1, 1))
-            FieldStates.PLAYER_1_QUEEN, FieldStates.PLAYER_2_QUEEN ->
-                listOf(Pair(1, -1), Pair(1, 1), Pair(-1, -1), Pair(-1, 1))
-            else -> emptyList()
-        }
-    }
-
-    private fun getMovesInDirection(row: Int, col: Int, dr: Int, dc: Int): List<Pair<Int, Int>> {
-        val moves = mutableListOf<Pair<Int, Int>>()
-        val newRow = row + dr
-        val newCol = col + dc
-        if (isWithinBounds(newRow, newCol) && isPlayable(newRow, newCol)) {
-            if (_board.value[newRow][newCol] == FieldStates.EMPTY
-                || _board.value[newRow][newCol] == FieldStates.HINT) {
-                moves.add(Pair(newRow, newCol))
-            } else {
-                moves.addAll(getCaptureMoves(row, col, dr, dc))
-            }
-        }
-        return moves
-    }
-
-    private fun getCaptureMoves(row: Int, col: Int, dr: Int, dc: Int): List<Pair<Int, Int>> {
-        val piece = _board.value[row][col]
-        val newRow = row + dr
-        val newCol = col + dc
-        val opponent = when (piece) {
-            FieldStates.PLAYER_1, FieldStates.PLAYER_1_QUEEN ->
-                listOf(FieldStates.PLAYER_2, FieldStates.PLAYER_2_QUEEN)
-            FieldStates.PLAYER_2, FieldStates.PLAYER_2_QUEEN ->
-                listOf(FieldStates.PLAYER_1, FieldStates.PLAYER_1_QUEEN)
-            else -> emptyList()
-        }
-        if (opponent.contains(_board.value[newRow][newCol])) {
-            val jumpRow = row + 2 * dr
-            val jumpCol = col + 2 * dc
-            if (isWithinBounds(jumpRow, jumpCol) && _board.value[jumpRow][jumpCol] == FieldStates.EMPTY) {
-                return listOf(Pair(jumpRow, jumpCol))
-            }
-        }
-        return emptyList()
-    }
-
-    private fun isWithinBounds(row: Int, col: Int) =
-        row in 0 until BOARD_SIZE && col in 0 until BOARD_SIZE
-
     private fun isPlayable(row: Int, col: Int) = (row + col) % 2 == 1
 
     private fun serializeBoard(board: Array<Array<FieldStates>>): String {
@@ -177,95 +109,5 @@ class GameViewModel @Inject constructor(
             }
         }
         return sb.toString()
-    }
-
-    fun onPieceSelected(selectedRow: Int, selectedCol: Int) {
-        val validMoves: List<Pair<Int, Int>> = getValidMoves(selectedRow, selectedCol)
-        _board.update { currentBoard ->
-            val newBoard = Array(currentBoard.size) { row ->
-                Array(currentBoard[row].size) { col ->
-                    when (currentBoard[row][col]) {
-                        FieldStates.HINT -> FieldStates.EMPTY
-                        else -> currentBoard[row][col]
-                    }
-                }
-            }
-            validMoves.forEach { (moveRow, moveCol) ->
-                if (newBoard[moveRow][moveCol] == FieldStates.EMPTY) {
-                    newBoard[moveRow][moveCol] = FieldStates.HINT
-                }
-            }
-            newBoard
-        }
-    }
-
-    fun attemptMove(source: Pair<Int, Int>, target: Pair<Int, Int>) {
-        if (!isValidMove(source, target)) return
-
-        val updatedBoard = performMove(source, target)
-        _board.value = updatedBoard
-
-        updateGameState(updatedBoard)
-        switchTurn()
-    }
-
-    private fun isValidMove(source: Pair<Int, Int>, target: Pair<Int, Int>): Boolean {
-        val validMoves = getValidMoves(source.first, source.second)
-        return validMoves.contains(target)
-    }
-
-    private fun performMove(source: Pair<Int, Int>, target: Pair<Int, Int>): Array<Array<FieldStates>> {
-        val currentBoard = _board.value.map { it.copyOf() }.toTypedArray()
-        val piece = currentBoard[source.first][source.second]
-        currentBoard[source.first][source.second] = FieldStates.EMPTY
-
-        val updatedBoard = handleCapture(source, target, currentBoard)
-        return handlePromotion(target, piece, updatedBoard).also {
-            it[target.first][target.second] = if (piece == FieldStates.PLAYER_1 && target.first == BOARD_SIZE - 1) FieldStates.PLAYER_1_QUEEN else if (piece == FieldStates.PLAYER_2 && target.first == 0) FieldStates.PLAYER_2_QUEEN else piece
-        }
-    }
-
-    private fun handleCapture(
-        source: Pair<Int, Int>,
-        target: Pair<Int, Int>,
-        board: Array<Array<FieldStates>>
-    ): Array<Array<FieldStates>> {
-        val dr = target.first - source.first
-        val dc = target.second - source.second
-        if (kotlin.math.abs(dr) == 2 && kotlin.math.abs(dc) == 2) {
-            val jumpedRow = source.first + dr / 2
-            val jumpedCol = source.second + dc / 2
-            board[jumpedRow][jumpedCol] = FieldStates.EMPTY
-        }
-        return board
-    }
-
-    private fun handlePromotion(
-        target: Pair<Int, Int>,
-        piece: FieldStates,
-        board: Array<Array<FieldStates>>
-    ): Array<Array<FieldStates>>{
-        if (piece == FieldStates.PLAYER_1 && target.first == BOARD_SIZE - 1) {
-            board[target.first][target.second] = FieldStates.PLAYER_1_QUEEN
-        } else if (piece == FieldStates.PLAYER_2 && target.first == 0) {
-            board[target.first][target.second] = FieldStates.PLAYER_2_QUEEN
-        } else {
-            board[target.first][target.second] = piece
-        }
-        return board
-    }
-
-    private fun updateGameState(board: Array<Array<FieldStates>>) {
-        val newGameState = serializeBoard(board)
-        gameToken?.let {
-            database.child(TOKENS).child(it).child("gameState").setValue(newGameState)
-        }
-    }
-
-    private fun switchTurn() {
-        val newTurn = if (userTurn == GameData.HOST_TURN) GameData.GUEST_TURN else GameData.HOST_TURN
-        gameToken?.let {
-            database.child(TOKENS).child(it).child("whosTurn").setValue(newTurn)
-        }
     }
 }
