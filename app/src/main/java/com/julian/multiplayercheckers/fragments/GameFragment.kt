@@ -25,10 +25,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.julian.multiplayercheckers.R
 import com.julian.multiplayercheckers.composables.GameField
 import com.julian.multiplayercheckers.enums.FieldStates
+import com.julian.multiplayercheckers.gamelogic.BOARD_SIZE
 import com.julian.multiplayercheckers.viewmodels.GameViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-const val BOARD_SIZE: Int = 8
 val NOT_USED_COLOR: Color = Color.White
 val USED_COLOR: Color = Color.Black
 val HINT_COLOR: Color = Color.LightGray
