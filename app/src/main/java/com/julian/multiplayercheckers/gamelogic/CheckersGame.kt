@@ -5,6 +5,12 @@ import com.julian.multiplayercheckers.enums.FieldStates
 
 class CheckersGame {
 
+    companion object {
+        val directions: List<Pair<Int, Int>> = listOf(
+            Pair(-1, -1), Pair(-1, 1), Pair(1, -1), Pair(1, 1)
+        )
+    }
+
     private var _playerTurn: Int? = null
     private var whosTurn: Int? = HOST_TURN
 
@@ -48,7 +54,11 @@ class CheckersGame {
                 selectedPiece = null
             }
         } else {
-            selectedPiece = if (board[Position(row, col)] in listOf(FieldStates.PLAYER_1, FieldStates.PLAYER_1_QUEEN)) {
+            val playablePieces = when (playerTurn) {
+                HOST_TURN -> listOf(FieldStates.PLAYER_2, FieldStates.PLAYER_2_QUEEN)
+                else -> listOf(FieldStates.PLAYER_1, FieldStates.PLAYER_1_QUEEN)
+            }
+            selectedPiece = if (board[Position(row, col)] in playablePieces) {
                 Position(row, col)
             } else {
                 null
@@ -57,10 +67,47 @@ class CheckersGame {
     }
 
     private fun isValidMove(move: Move): Boolean {
-        val (from, to) = move
-        if (!board.isValidPosition(from) || !board.isValidPosition(to)) return false
-        return board[from] == FieldStates.EMPTY || board[to] != FieldStates.EMPTY
+        val validMoves: List<Move> = getValidMovesForPiece(move.from)
+        return validMoves.any { it.to == move.to }
     }
+
+    private fun isValidPosition(position: Position): Boolean {
+        return position.row in board.grid.indices && position.col in board.grid[0].indices
+    }
+
+    private fun isOpponentPiece(myPiece: FieldStates, other: FieldStates): Boolean {
+        return when (myPiece) {
+            FieldStates.PLAYER_1, FieldStates.PLAYER_1_QUEEN ->
+                other == FieldStates.PLAYER_2 || other == FieldStates.PLAYER_2_QUEEN
+            FieldStates.PLAYER_2, FieldStates.PLAYER_2_QUEEN ->
+                other == FieldStates.PLAYER_1 || other == FieldStates.PLAYER_1_QUEEN
+            else -> false
+        }
+    }
+
+    private fun getValidMovesForPiece(position: Position): List<Move> {
+        val piece = board[position]
+        val moves = mutableListOf<Move>()
+
+        for (direction in directions) {
+
+            val adjacent = Position(position.row + direction.first, position.col + direction.second)
+            if (!isValidPosition(adjacent)) continue
+
+            if (board[adjacent] == FieldStates.EMPTY) {
+                moves.add(Move(position, adjacent))
+            } else if (isOpponentPiece(piece, board[adjacent])) {
+                val jumpPos = Position(adjacent.row + direction.first, adjacent.col + direction.second)
+                if (isValidPosition(jumpPos) && board[jumpPos] == FieldStates.EMPTY) {
+                    moves.add(Move(position, jumpPos))
+                }
+            }
+        }
+
+        val capturingMoves = moves.filter { kotlin.math.abs(it.to.row - it.from.row) == 2 }
+        return capturingMoves.ifEmpty { moves }
+    }
+
 
     private fun makeMove(move: Move) {
         board[move.to] = board[move.from]
