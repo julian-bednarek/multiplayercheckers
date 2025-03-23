@@ -72,7 +72,7 @@ class CheckersGame {
     }
 
     private fun isValidPosition(position: Position): Boolean {
-        return position.row in board.grid.indices && position.col in board.grid[0].indices
+        return position.row in 0 until BOARD_SIZE && position.col in 0 until BOARD_SIZE
     }
 
     private fun isOpponentPiece(myPiece: FieldStates, other: FieldStates): Boolean {

@@ -34,6 +34,10 @@ class GameViewModel @Inject constructor(
             object : CheckersGame.BoardStateListener {
                 override fun onBoardStateChanged(board: Array<Array<FieldStates>>) {
                     _board.value = board.map { it.copyOf() }.toTypedArray()
+                    val serializedBoard = serializeBoard(board)
+                    gameToken?.let { token ->
+                        database.child(TOKENS).child(token).child("gameState").setValue(serializedBoard)
+                    }
                 }
             }
         )
