@@ -1,5 +1,6 @@
 package com.julian.multiplayercheckers.gamelogic
 
+import com.julian.multiplayercheckers.dataclasses.GameData.Companion.GUEST_TURN
 import com.julian.multiplayercheckers.dataclasses.GameData.Companion.HOST_TURN
 import com.julian.multiplayercheckers.enums.FieldStates
 
@@ -11,8 +12,12 @@ class CheckersGame {
         )
     }
 
+
     private var _playerTurn: Int? = null
-    private var whosTurn: Int? = HOST_TURN
+    private var whosTurn: Int = HOST_TURN
+
+    val currentTurn: Int
+        get() = whosTurn
 
     val playerTurn: Int
         get() = _playerTurn ?: throw IllegalStateException("Player turn not initialized")
@@ -22,6 +27,7 @@ class CheckersGame {
             _playerTurn = turn
         }
     }
+
     val board: Board = Board()
     private var selectedPiece: Position? = null
 
@@ -35,14 +41,14 @@ class CheckersGame {
         this.boardStateListener = listener
     }
 
-    internal fun notifyBoardStateChanged() {
+    private fun notifyBoardStateChanged() {
         boardStateListener?.onBoardStateChanged(board.grid)
     }
 
     fun loadFromString(stateStr: String, turn: Int) {
         board.loadFromString(stateStr)
-        notifyBoardStateChanged()
         whosTurn = turn
+        notifyBoardStateChanged()
     }
 
     fun onPieceSelected(row: Int, col: Int) {
@@ -112,6 +118,7 @@ class CheckersGame {
     private fun makeMove(move: Move) {
         board[move.to] = board[move.from]
         board[move.from] = FieldStates.EMPTY
+        whosTurn = if (whosTurn == HOST_TURN) GUEST_TURN else HOST_TURN
         notifyBoardStateChanged()
     }
 }

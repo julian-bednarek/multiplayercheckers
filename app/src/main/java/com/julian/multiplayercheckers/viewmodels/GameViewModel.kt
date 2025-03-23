@@ -36,7 +36,13 @@ class GameViewModel @Inject constructor(
                     _board.value = board.map { it.copyOf() }.toTypedArray()
                     val serializedBoard = serializeBoard(board)
                     gameToken?.let { token ->
-                        database.child(TOKENS).child(token).child("gameState").setValue(serializedBoard)
+                        val updates = mapOf(
+                            "gameState" to serializedBoard,
+                            "whosTurn" to game.currentTurn
+                        )
+                        database.child(TOKENS).child(token).updateChildren(updates)
+                        Log.d("BOARD STATE", serializedBoard)
+                        Log.d("WHOS TURN", game.currentTurn.toString())
                     }
                 }
             }
@@ -58,7 +64,10 @@ class GameViewModel @Inject constructor(
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val gameData: GameData = snapshot.getValue(GameData::class.java)!!
-                    game.loadFromString(gameData.gameState, gameData.whosTurn)
+                    val localSerialized = serializeBoard(game.board.grid)
+                    if (localSerialized != gameData.gameState) {
+                        game.loadFromString(gameData.gameState, gameData.whosTurn)
+                    }
                 }
             }
 
