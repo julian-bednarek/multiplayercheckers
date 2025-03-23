@@ -29,6 +29,7 @@ class Board {
     }
     fun isValidPosition(pos: Position): Boolean = pos.row in 0 until SIZE && pos.col in 0 until SIZE
 
+
     fun loadFromString(stateStr: String) {
         if (stateStr.length != 32) return
         var index = 0

@@ -72,7 +72,7 @@ class HostGameFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (isRemoving || requireActivity().isFinishing) {
+        if (requireActivity().isFinishing) {
             viewModel.cancelGameHosting()
             _isHosting = false
         }

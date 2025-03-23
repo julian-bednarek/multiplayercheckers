@@ -2,7 +2,6 @@ package com.julian.multiplayercheckers.gamelogic
 
 import com.julian.multiplayercheckers.dataclasses.GameData.Companion.HOST_TURN
 import com.julian.multiplayercheckers.enums.FieldStates
-import kotlin.properties.Delegates
 
 class CheckersGame {
 

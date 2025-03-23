@@ -1,6 +1,7 @@
 package com.julian.multiplayercheckers.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +10,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.julian.multiplayercheckers.dataclasses.GameData
-import com.julian.multiplayercheckers.dataclasses.GameData.Companion.GUEST_TURN
 import com.julian.multiplayercheckers.dataclasses.GameData.Companion.HOST_TURN
 import com.julian.multiplayercheckers.enums.FieldStates
 import com.julian.multiplayercheckers.gamelogic.BOARD_SIZE
@@ -33,7 +33,7 @@ class GameViewModel @Inject constructor(
         game.setBoardStateListener(
             object : CheckersGame.BoardStateListener {
                 override fun onBoardStateChanged(board: Array<Array<FieldStates>>) {
-                    _board.postValue(board)
+                    _board.value = board.map { it.copyOf() }.toTypedArray()
                 }
             }
         )
@@ -59,7 +59,7 @@ class GameViewModel @Inject constructor(
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("GameViewModel", "Error observing board: ${error.message}")
             }
         }
         gameStateReference.addValueEventListener(gameStateListener)

@@ -6,7 +6,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.julian.multiplayercheckers.dataclasses.GameData
 import com.julian.multiplayercheckers.dataclasses.GameData.Companion.GAME_STARTED
 import com.julian.multiplayercheckers.viewmodels.GameHostingViewModel.Companion.TOKENS
 import dagger.hilt.android.lifecycle.HiltViewModel

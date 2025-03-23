@@ -1,6 +1,7 @@
 package com.julian.multiplayercheckers.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -80,8 +82,8 @@ fun GameFragmentLayout(gameToken: String, viewModel: GameViewModel = hiltViewMod
 fun ProcessBoardField(
     viewModel: GameViewModel, row: Int, col: Int,
 ) {
-    val boardState by viewModel.board.collectAsState()
-    when(boardState[row][col]) {
+    val boardState by viewModel.board.observeAsState()
+    when(boardState!![row][col]) {
         FieldStates.NOT_USED  -> GameField(NOT_USED_COLOR, FieldStates.NOT_USED
         ) { viewModel.onPieceSelected(row, col) }
         FieldStates.EMPTY     -> GameField(USED_COLOR, FieldStates.EMPTY
