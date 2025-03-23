@@ -58,6 +58,15 @@ class CheckersGame {
             if (isValidMove(move)) {
                 makeMove(move)
                 selectedPiece = null
+            } else {
+                val playablePieces = when (playerTurn) {
+                    HOST_TURN -> listOf(FieldStates.PLAYER_2, FieldStates.PLAYER_2_QUEEN)
+                    else -> listOf(FieldStates.PLAYER_1, FieldStates.PLAYER_1_QUEEN)
+                }
+                selectedPiece = null
+                if (board[Position(row, col)] in playablePieces) {
+                    selectedPiece = Position(row, col)
+                }
             }
         } else {
             val playablePieces = when (playerTurn) {
@@ -114,9 +123,35 @@ class CheckersGame {
         return capturingMoves.ifEmpty { moves }
     }
 
+    private fun handlePotentialCapture(move: Move) {
+        if (kotlin.math.abs(move.to.row - move.from.row) == 2) {
+            val capturedRow = (move.from.row + move.to.row) / 2
+            val capturedCol = (move.from.col + move.to.col) / 2
+            board[Position(capturedRow, capturedCol)] = FieldStates.EMPTY
+        }
+    }
+
+    private fun handlePotentialPromotion(move: Move) {
+        val piece = board[move.from]
+        when (piece) {
+            FieldStates.PLAYER_1 -> {
+                if (move.to.row == BOARD_SIZE - 1) {
+                    board[move.to] = FieldStates.PLAYER_1_QUEEN
+                }
+            }
+            FieldStates.PLAYER_2 -> {
+                if (move.to.row == 0) {
+                    board[move.to] = FieldStates.PLAYER_2_QUEEN
+                }
+            }
+            else -> {}
+        }
+    }
 
     private fun makeMove(move: Move) {
         board[move.to] = board[move.from]
+        handlePotentialCapture(move)
+        handlePotentialPromotion(move)
         board[move.from] = FieldStates.EMPTY
         whosTurn = if (whosTurn == HOST_TURN) GUEST_TURN else HOST_TURN
         notifyBoardStateChanged()
