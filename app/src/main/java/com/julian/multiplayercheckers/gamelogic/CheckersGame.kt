@@ -19,7 +19,7 @@ class CheckersGame {
     val currentTurn: Int
         get() = whosTurn
 
-    val playerTurn: Int
+    private val playerTurn: Int
         get() = _playerTurn ?: throw IllegalStateException("Player turn not initialized")
 
     fun initializePlayerTurn(turn: Int) {
