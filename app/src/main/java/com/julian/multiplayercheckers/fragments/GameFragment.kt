@@ -1,7 +1,6 @@
 package com.julian.multiplayercheckers.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -26,6 +24,7 @@ import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.julian.multiplayercheckers.R
 import com.julian.multiplayercheckers.composables.GameField
+import com.julian.multiplayercheckers.dataclasses.GameData.Companion.HOST_TURN
 import com.julian.multiplayercheckers.enums.FieldStates
 import com.julian.multiplayercheckers.gamelogic.BOARD_SIZE
 import com.julian.multiplayercheckers.viewmodels.GameViewModel
@@ -67,7 +66,8 @@ fun GameFragmentLayout(gameToken: String, viewModel: GameViewModel = hiltViewMod
             modifier = Modifier
                 .offset(y = (-100).dp)
         ) {
-            for (i in 0 until BOARD_SIZE) {
+            val loopRange = if (viewModel.userTurn == HOST_TURN) 0 until BOARD_SIZE else BOARD_SIZE - 1 downTo 0
+            for (i in loopRange) {
                 Row {
                     for (j in 0 until BOARD_SIZE) {
                         ProcessBoardField(viewModel, i, j)
