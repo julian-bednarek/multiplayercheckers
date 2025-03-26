@@ -105,7 +105,8 @@ class CheckersGame {
         val moves = mutableListOf<Move>()
 
         for (direction in directions) {
-
+            if (direction.first > 0 && piece == FieldStates.PLAYER_2) continue
+            if (direction.first < 0 && piece == FieldStates.PLAYER_1) continue
             val adjacent = Position(position.row + direction.first, position.col + direction.second)
             if (!isValidPosition(adjacent)) continue
 
